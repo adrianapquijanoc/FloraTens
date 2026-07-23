@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FloraTens — Un momento de calma, todos los días</title>
+<link rel="icon" type="image/png" href="assets/logo-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Quicksand:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#3B3574;
+    --indigo-dark:#2B2438;
+    --mauve:#B98FB0;
+    --mauve-light:#E8D6E2;
+    --blush:#FBF3F6;
+    --paper:#FFFDFB;
+    --sage:#98AC86;
+    --sage-light:#E4EADD;
+    --text-muted:#79728A;
+    --shadow: 0 10px 30px rgba(59,53,116,0.08);
+    --logo-mark: url('assets/logo-mark.png');
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Inter',sans-serif;
+    color:var(--indigo-dark);
+    background:var(--paper);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Fraunces',serif; margin:0; font-weight:500;}
+  .accent{font-style:italic; color:var(--mauve); font-weight:400;}
+  a{text-decoration:none; color:inherit;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 28px;}
+  section{padding:96px 0;}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky; top:0; z-index:100;
+    background:rgba(255,253,251,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s ease, box-shadow .3s ease;
+  }
+  header.scrolled{border-color:rgba(59,53,116,0.08); box-shadow:0 2px 20px rgba(59,53,116,0.05);}
+  nav{display:flex; align-items:center; justify-content:space-between; padding:18px 28px; max-width:1180px; margin:0 auto;}
+  .logo{display:flex; align-items:center; gap:8px; font-family:'Quicksand',sans-serif; font-weight:700; font-size:22px; color:var(--indigo);}
+  .logo .tens{font-family:'Fraunces',serif; font-style:italic; font-weight:400; color:var(--mauve);}
+  .navlinks{display:flex; gap:36px; align-items:center;}
+  .navlinks a{font-size:14.5px; font-weight:500; color:var(--indigo-dark); opacity:.8; transition:opacity .2s;}
+  .navlinks a:hover{opacity:1;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--indigo); color:#fff; border:none;
+    padding:13px 26px; border-radius:100px; font-family:'Inter',sans-serif;
+    font-weight:600; font-size:14.5px; cursor:pointer;
+    transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .btn:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(59,53,116,0.25);}
+  .btn-outline{background:transparent; color:var(--indigo); border:1.5px solid var(--indigo);}
+  .btn-outline:hover{background:var(--indigo); color:#fff;}
+  .menu-toggle{display:none; background:none; border:none; cursor:pointer;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative; overflow:hidden;
+    padding:90px 0 60px;
+    background:
+      radial-gradient(circle at 85% 15%, rgba(185,143,176,0.18), transparent 45%),
+      radial-gradient(circle at 8% 80%, rgba(152,172,134,0.14), transparent 40%),
+      var(--blush);
+  }
+  .hero-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:60px; align-items:center;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--mauve); background:var(--mauve-light); padding:7px 16px; border-radius:100px;
+    margin-bottom:22px;
+  }
+  .hero h1{font-size:52px; line-height:1.12; color:var(--indigo-dark); letter-spacing:-0.01em;}
+  .hero p.lead{font-size:18px; line-height:1.6; color:var(--text-muted); margin:24px 0 34px; max-width:460px;}
+  .hero-ctas{display:flex; gap:14px; align-items:center; flex-wrap:wrap;}
+  .hero-note{margin-top:18px; font-size:13.5px; color:var(--text-muted);}
+  .hero-visual{position:relative; display:flex; justify-content:center; align-items:center; height:460px;}
+  .pulse-ring{
+    position:absolute; width:340px; height:340px; border-radius:50%;
+    border:1.5px solid rgba(185,143,176,0.35);
+    animation:pulse 3.2s ease-out infinite;
+  }
+  .pulse-ring.d2{animation-delay:1.1s;}
+  .pulse-ring.d3{animation-delay:2.2s;}
+  @keyframes pulse{
+    0%{transform:scale(0.7); opacity:0;}
+    30%{opacity:.7;}
+    100%{transform:scale(1.25); opacity:0;}
+  }
+  .device-card{
+    position:relative; z-index:2;
+    background:var(--paper); border-radius:28px; padding:40px;
+    box-shadow:var(--shadow); width:280px; text-align:center;
+  }
+  .mark-icon{width:110px; height:132px; margin:0 auto 12px; background-image:var(--logo-mark); background-size:contain; background-repeat:no-repeat; background-position:center;}
+  .product-logo-mark{width:88px; height:104px; background-image:var(--logo-mark); background-size:contain; background-repeat:no-repeat; background-position:center;}
+  .hero-product-photo{width:210px; height:auto; margin:0 auto 14px; display:block;}
+  .product-photo{width:82%; height:auto; display:block; margin:0 auto;}
+  .brand-stamp{position:absolute; bottom:12px; right:12px; width:34px; height:40px; background-image:var(--logo-mark); background-size:contain; background-repeat:no-repeat; background-position:center; opacity:.9;}
+  .electrode-photo{width:80%; height:auto; display:block; margin:0 auto;}
+  .modal-icon{display:inline-block; width:22px; height:26px; vertical-align:middle; margin-right:8px; background-image:var(--logo-mark); background-size:contain; background-repeat:no-repeat; background-position:center;}
+  .device-card .badge{
+    display:inline-block; margin-top:14px; font-size:12px; font-weight:600;
+    color:var(--sage); background:var(--sage-light); padding:5px 14px; border-radius:100px;
+  }
+  .authenticity-badge{position:absolute; top:-14px; right:-10px; z-index:3; background:#fff; border-radius:50%; width:64px; height:64px; box-shadow:var(--shadow); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; border:1.5px solid var(--mauve-light);}
+  .authenticity-badge .mk{width:22px; height:26px; background-image:var(--logo-mark); background-size:contain; background-repeat:no-repeat; background-position:center;}
+  .authenticity-badge span{font-size:8px; font-weight:700; color:var(--indigo); text-transform:uppercase; letter-spacing:.03em;}
+
+  /* ---------- TRUST BAR ---------- */
+  .trust{
+    background:var(--indigo); padding:26px 0;
+  }
+  .trust .wrap{display:flex; justify-content:space-between; flex-wrap:wrap; gap:20px;}
+  .trust-item{display:flex; align-items:center; gap:10px; color:#fff; font-size:13.5px; font-weight:500; flex:1; min-width:200px; justify-content:center;}
+  .trust-item svg{flex-shrink:0; opacity:.9;}
+
+  /* ---------- SECTION HEADERS ---------- */
+  .section-head{max-width:600px; margin:0 auto 56px; text-align:center;}
+  .section-head .eyebrow{background:none; padding:0; color:var(--mauve); margin-bottom:14px;}
+  .section-head h2{font-size:36px; color:var(--indigo-dark); line-height:1.25;}
+  .section-head p{color:var(--text-muted); font-size:16px; margin-top:14px; line-height:1.6;}
+
+  /* ---------- COMO FUNCIONA ---------- */
+  .steps{display:grid; grid-template-columns:repeat(4,1fr); gap:0; position:relative;}
+  .steps::before{
+    content:""; position:absolute; top:38px; left:12.5%; right:12.5%; height:2px;
+    background:repeating-linear-gradient(90deg, var(--mauve-light) 0 10px, transparent 10px 18px);
+  }
+  .step{position:relative; text-align:center; padding:0 24px;}
+  .step-num{
+    width:76px; height:76px; border-radius:50%; background:var(--paper); border:2px solid var(--mauve-light);
+    display:flex; align-items:center; justify-content:center; margin:0 auto 24px; position:relative; z-index:2;
+    font-family:'Fraunces',serif; font-style:italic; font-size:26px; color:var(--mauve);
+  }
+  .step h3{font-size:19px; margin-bottom:10px; color:var(--indigo-dark);}
+  .step p{font-size:14.5px; color:var(--text-muted); line-height:1.6;}
+
+  /* ---------- PRODUCTO ---------- */
+  .shop{background:var(--blush);}
+  .product-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px;}
+  .product-card{
+    background:var(--paper); border-radius:22px; overflow:hidden; box-shadow:var(--shadow);
+    display:flex; flex-direction:column; transition:transform .25s ease, box-shadow .25s ease;
+    scroll-margin-top:90px;
+  }
+  .product-card:hover{transform:translateY(-6px); box-shadow:0 20px 40px rgba(59,53,116,0.14);}
+  .product-card.featured{border:2px solid var(--mauve);}
+  .product-media{
+    height:200px; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(160deg, var(--mauve-light), var(--blush));
+    position:relative;
+  }
+  .product-media .tag{
+    position:absolute; top:16px; left:16px; background:var(--indigo); color:#fff;
+    font-size:11px; font-weight:600; padding:5px 12px; border-radius:100px; letter-spacing:.03em;
+  }
+  .product-body{padding:26px; display:flex; flex-direction:column; gap:6px; flex:1;}
+  .product-body h3{font-size:19px; color:var(--indigo-dark);}
+  .product-body p{font-size:13.5px; color:var(--text-muted); line-height:1.55; margin:6px 0 16px; flex:1;}
+  .price-row{display:flex; align-items:center; justify-content:space-between;}
+  .price{font-family:'Fraunces',serif; font-size:22px; color:var(--indigo);}
+  .price small{font-family:'Inter',sans-serif; font-size:12px; color:var(--text-muted); font-weight:500;}
+  .add-btn{
+    background:var(--indigo-dark); color:#fff; border:none; padding:9px 18px; border-radius:100px;
+    font-size:13px; font-weight:600; cursor:pointer; transition:background .2s;
+  }
+  .add-btn:hover{background:var(--indigo);}
+
+  /* ---------- COMUNIDAD ---------- */
+  .community{position:relative;}
+  /* ---------- COMUNIDAD (removido, estilos ya no usados) ---------- */
+  .community-banner{
+    margin-top:56px; background:var(--indigo); border-radius:26px; padding:48px 56px;
+    display:flex; align-items:center; justify-content:space-between; gap:30px; flex-wrap:wrap; color:#fff;
+  }
+  .community-banner h3{font-size:26px; max-width:420px; color:#fff;}
+  .community-banner p{color:var(--mauve-light); font-size:14.5px; margin-top:10px; max-width:420px;}
+
+  /* ---------- FAQ ---------- */
+  .faq-list{max-width:760px; margin:0 auto;}
+  .faq-item{border-bottom:1px solid var(--mauve-light);}
+  .faq-q{
+    width:100%; text-align:left; background:none; border:none; padding:22px 4px;
+    display:flex; align-items:center; justify-content:space-between; cursor:pointer;
+    font-family:'Fraunces',serif; font-size:17px; color:var(--indigo-dark);
+  }
+  .faq-q .plus{font-size:22px; color:var(--mauve); transition:transform .3s ease; font-family:'Inter',sans-serif; font-weight:300;}
+  .faq-item.open .plus{transform:rotate(45deg);}
+  .faq-a{max-height:0; overflow:hidden; transition:max-height .35s ease;}
+  .faq-a p{padding:0 4px 22px; font-size:14.5px; color:var(--text-muted); line-height:1.65; max-width:640px;}
+
+  /* ---------- PREVENTA CTA ---------- */
+  .preventa{
+    background:linear-gradient(160deg, var(--indigo) 0%, #4a4290 100%);
+    color:#fff; border-radius:0; text-align:center;
+    position:relative; overflow:hidden;
+  }
+  .preventa .wrap{position:relative; z-index:2;}
+  .preventa h2{color:#fff; font-size:38px; max-width:600px; margin:0 auto;}
+  .preventa p{color:var(--mauve-light); font-size:16px; margin:18px auto 36px; max-width:480px; line-height:1.6;}
+  .preventa-form{display:flex; gap:10px; max-width:440px; margin:0 auto; flex-wrap:wrap; justify-content:center;}
+  .preventa-form input{
+    flex:1; min-width:220px; padding:15px 20px; border-radius:100px; border:none; font-family:'Inter',sans-serif; font-size:14.5px;
+  }
+  .preventa-form input:focus{outline:2px solid var(--mauve);}
+  .preventa-form .btn{background:var(--mauve); color:var(--indigo-dark);}
+  .preventa-form .btn:hover{background:#fff;}
+  .preventa-count{margin-top:22px; font-size:13px; color:var(--mauve-light); opacity:.85;}
+  .preventa-icon{width:46px; height:54px; margin:0 auto 18px; background:#fff; border-radius:14px; padding:8px; box-sizing:border-box; background-image:var(--logo-mark); background-size:60%; background-repeat:no-repeat; background-position:center; box-shadow:0 8px 20px rgba(0,0,0,0.15);}
+
+  /* ---------- MODAL ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; z-index:1000;
+    background:rgba(43,36,56,0.55); backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center; padding:24px;
+    opacity:0; visibility:hidden; transition:opacity .3s ease, visibility .3s ease;
+  }
+  .modal-overlay.open{opacity:1; visibility:visible;}
+  .modal-card{
+    background:var(--paper); border-radius:26px; padding:40px 44px;
+    max-width:680px; width:100%; max-height:88vh; overflow-y:auto;
+    position:relative; box-shadow:0 30px 70px rgba(43,36,56,0.35);
+    transform:translateY(16px) scale(0.98); transition:transform .3s ease;
+  }
+  .modal-overlay.open .modal-card{transform:translateY(0) scale(1);}
+  .modal-close{
+    position:absolute; top:20px; right:20px; background:var(--blush); border:none;
+    width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    color:var(--indigo); cursor:pointer; transition:background .2s;
+  }
+  .modal-close:hover{background:var(--mauve-light);}
+  @media (max-width:600px){
+    .modal-card{padding:30px 24px;}
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--indigo-dark); color:var(--mauve-light); padding:64px 0 30px;}
+  .footer-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; margin-bottom:50px;}
+  .footer-logo{font-family:'Quicksand',sans-serif; font-weight:700; font-size:22px; color:#fff;}
+  .footer-logo .tens{font-family:'Fraunces',serif; font-style:italic; font-weight:400; color:var(--mauve);}
+  .footer-grid p.tag{font-size:13.5px; color:var(--mauve-light); opacity:.7; margin-top:14px; max-width:260px; line-height:1.6;}
+  .footer-col h4{font-family:'Inter',sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:#fff; opacity:.6; margin-bottom:16px; font-weight:600;}
+  .footer-col a{display:block; font-size:14px; color:var(--mauve-light); opacity:.85; margin-bottom:12px; transition:opacity .2s;}
+  .footer-col a:hover{opacity:1;}
+  .footer-bottom{
+    border-top:1px solid rgba(255,255,255,0.1); padding-top:26px;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;
+    font-size:12.5px; color:var(--mauve-light); opacity:.6;
+  }
+  .social-row{display:flex; gap:14px;}
+  .social-row a{width:34px; height:34px; border-radius:50%; border:1px solid rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center;}
+
+  /* ---------- REVEAL ---------- */
+  .reveal{opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1; transform:none;}
+
+  .grid-2-col{display:grid; grid-template-columns:1fr 1fr;}
+  .grid-3-col{display:grid; grid-template-columns:repeat(3,1fr);}
+
+  @media (max-width: 1024px){
+    .wrap{padding:0 24px;}
+    .hero h1{font-size:44px;}
+    .steps{grid-template-columns:repeat(2,1fr); gap:36px 20px;}
+    .steps::before{display:none;}
+    .grid-3-col{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width: 880px){
+    .navlinks, .menu-toggle ~ .btn{display:none;}
+    .menu-toggle{display:block;}
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-visual{height:320px; margin-top:20px;}
+    .hero h1{font-size:38px;}
+    .steps{grid-template-columns:1fr; gap:40px;}
+    .steps::before{display:none;}
+    .product-grid{grid-template-columns:1fr;}
+    .grid-2-col{grid-template-columns:1fr;}
+    .grid-3-col{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr 1fr;}
+    .community-banner{flex-direction:column; text-align:center; align-items:center;}
+    section{padding:64px 0;}
+  }
+</style>
+</head>
+<body>
+
+<header id="header">
+  <nav>
+    <a href="#" class="logo"><img class="js-wordmark" alt="FloraTens" style="height:26px; width:auto; display:block;"></a>
+    <div class="navlinks" id="navlinks">
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#producto">Producto</a>
+      <a href="#sobre-nosotras">Quiénes somos</a>
+      <a href="#faq">Preguntas</a>
+    </div>
+    <button class="btn" onclick="goToPreventa()">Reserva la preventa</button>
+    <button class="menu-toggle" onclick="document.getElementById('navlinks').classList.toggle('mobile-open')" aria-label="Menú">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3B3574" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero" style="padding-top:64px;">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">🌸 Tu masajeador de bienestar</span>
+      <h1>Un momento de <span class="accent">calma</span>,<br>todos los días.</h1>
+      <p class="lead">Calor, tecnología y una app que te guía — para esos días en que tu cuerpo pide ir más despacio.</p>
+      <p style="font-family:'Fraunces',serif; font-style:italic; font-size:16px; color:var(--mauve); margin:-10px 0 26px;">Cuando el mes se siente distinto, Flora se adapta a ti.</p>
+      <div class="hero-ctas">
+        <button class="btn" onclick="goToPreventa()">Reserva tu Flora</button>
+        <a href="#como-funciona" class="btn btn-outline">Cómo funciona</a>
+      </div>
+      <p class="hero-note">🌱 Preventa limitada · Envío a toda Colombia</p>
+    </div>
+    <div class="hero-visual">
+      <div class="pulse-ring"></div>
+      <div class="pulse-ring d2"></div>
+      <div class="pulse-ring d3"></div>
+      <div class="device-card">
+        <div class="authenticity-badge"><div class="mk" role="img" aria-label="Flora"></div><span>Original</span></div>
+        <img class="js-product-photo hero-product-photo" alt="Dispositivo Flora">
+        <h3 style="font-size:18px;">Flora</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Tu masajeador de calor y bienestar</p>
+        <span class="badge">Modos 30 / 60 min</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:80px 0; background:var(--blush);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Nuestro ecosistema</span>
+      <h2>Dos tecnologías. Una sola Flora.</h2>
+    </div>
+
+    <div class="reveal" style="display:flex; align-items:center; justify-content:center; gap:22px; flex-wrap:wrap; max-width:640px; margin:0 auto 40px;">
+      <div style="background:var(--paper); border-radius:20px; padding:26px 30px; box-shadow:var(--shadow); text-align:center; width:190px;">
+        <img src="assets/device-photo.png" alt="Masajeador TENS Flora" style="width:100%; height:56px; object-fit:contain; margin-bottom:12px;">
+        <h3 style="font-size:15px; color:var(--indigo-dark); margin-bottom:4px;">Masajeador TENS</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin:0;">Calor + estimulación</p>
+      </div>
+
+      <span style="font-family:'Fraunces',serif; font-size:30px; color:var(--mauve); font-weight:500;">+</span>
+
+      <div style="background:var(--paper); border-radius:20px; padding:26px 30px; box-shadow:var(--shadow); text-align:center; width:190px;">
+        <img src="assets/app-icon.png" alt="App Flora con IA" style="width:56px; height:56px; border-radius:14px; object-fit:cover; margin:0 auto 12px; display:block;">
+        <h3 style="font-size:15px; color:var(--indigo-dark); margin-bottom:4px;">App con IA</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin:0;">Te ayuda a conocerte mejor</p>
+      </div>
+    </div>
+
+    <div class="reveal" style="display:flex; justify-content:center; margin-bottom:36px;">
+      <svg width="20" height="28" viewBox="0 0 20 28" fill="none"><path d="M10 0v22M10 22l-7-7M10 22l7-7" stroke="#B98FB0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+
+    <div class="reveal" style="max-width:700px; margin:0 auto; background:var(--paper); border-radius:24px; padding:44px 48px; box-shadow:var(--shadow);">
+      <p style="font-family:'Fraunces',serif; font-style:italic; font-size:18px; line-height:1.75; color:var(--indigo-dark); margin:0;">Juntos son Flora: una plataforma de acompañamiento integral que le da a cada mujer lo que yo no tuve — un agente conversacional que te guía paso a paso para usar tu dispositivo correctamente, y te acompaña en esos días del mes en que tu cuerpo solo pide una pausa.</p>
+      <p style="font-family:'Fraunces',serif; font-weight:500; font-size:22px; color:var(--mauve); margin:22px 0 0; text-align:right;">Sin pastillas, sin pausar tu vida.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust">
+  <div class="wrap">
+    <div class="trust-item" style="cursor:pointer;" onclick="openModal('modal-garantia', event)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+      Garantía de satisfacción 60 días
+    </div>
+    <div class="trust-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="7" width="15" height="10" rx="1.5"/><path d="M16 10h4l3 3v4h-7z"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg>
+      Envío a toda Colombia
+    </div>
+    <div class="trust-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      Paga en cuotas sin interés
+    </div>
+  </div>
+</div>
+
+<!-- COMO FUNCIONA -->
+<section id="como-funciona">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Cómo funciona</span>
+      <h2>Cuatro pasos para tu momento de calma</h2>
+      <p>Sin cables complicados, sin instrucciones eternas. Flora está pensado para caber en tu rutina, no para cambiarla.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <h3>Textea con Flora</h3>
+        <p>Entra a la app y cuéntale a Flora cómo te sientes hoy — te escucha y te ayuda a conocer mejor tu cuerpo.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">2</div>
+        <h3>Coloca el dispositivo</h3>
+        <p>Ubícalo en tu abdomen, donde tu cuerpo lo pida ese día.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">3</div>
+        <h3>Sigue la guía</h3>
+        <p>El agente IA te indica el modo, la intensidad y el tiempo ideal, aprendiendo contigo qué le sienta mejor a tu cuerpo.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">4</div>
+        <h3>Respira</h3>
+        <p>Un momento de calma, acompañada de principio a fin.</p>
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top:56px; display:grid; grid-template-columns:0.9fr 1.1fr; gap:32px; align-items:center;">
+      <div style="background:var(--blush); border-radius:22px; overflow:hidden; min-height:280px; display:flex; align-items:center; justify-content:center;">
+        <img src="assets/editorial-photo.jpg" alt="Flora puesto en el abdomen" style="width:100%; height:100%; object-fit:cover; object-position:center 30%; display:block;">
+      </div>
+      <div style="background:var(--indigo); border-radius:22px; padding:38px;">
+        <span class="eyebrow" style="background:none; color:var(--mauve); padding:0;">Nuestra diferenciación</span>
+        <p style="font-family:'Fraunces',serif; font-style:italic; font-size:18px; line-height:1.65; color:#fff; margin-top:14px;">Mientras el mercado vende o el dispositivo o la app, Flora es el único ecosistema que integra alivio inmediato (TENS), acompañamiento inteligente (IA conversacional) y comprensión del cuerpo (educación + datos), con cercanía cultural para la mujer latinoamericana.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTO -->
+<section id="producto" class="shop">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Producto</span>
+      <h2>Elige tu Flora</h2>
+      <p>Un dispositivo, hecho para acompañarte. Y todo lo que necesitas para que dure contigo.</p>
+    </div>
+    <div class="product-grid">
+      <div class="product-card reveal" id="kit-flora-anual">
+        <div class="product-media">
+          <span class="tag" style="background:var(--sage);">4 kits de electrodos</span>
+          <img class="js-product-photo product-photo" alt="Dispositivo Flora - Kit Flora anual">
+        </div>
+        <div class="product-body">
+          <h3>Kit Flora anual</h3>
+          <p>4 pares de electrodos originales, uno para cada trimestre, incluye app. Tu suministro completo para todo el año.</p>
+          <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:4px;">
+            <span style="font-size:14px; color:var(--text-muted); text-decoration:line-through;">$380.000 COP</span>
+            <span style="font-size:11.5px; font-weight:700; color:#fff; background:var(--sage); padding:3px 10px; border-radius:100px;">Primeras 30 preórdenes</span>
+          </div>
+          <div class="price-row">
+            <span class="price">$225.000 <small>COP</small></span>
+            <button class="add-btn" onclick="goToPreventa()">Reservar</button>
+          </div>
+          <a href="#preventa" style="display:inline-block; margin-top:10px; font-size:12.5px; font-weight:600; color:var(--mauve);">¿Cómo separarlo? →</a>
+        </div>
+      </div>
+      <div class="product-card reveal" id="kit-electrodos-anual">
+        <div class="product-media" style="background:linear-gradient(160deg,var(--sage-light),var(--blush));">
+          <span class="tag" style="background:var(--indigo);">Desde el año 2</span>
+          <img class="js-electrode-photo electrode-photo" alt="Kit de electrodos anual">
+        </div>
+        <div class="product-body">
+          <h3>Kit de electrodos (anual)</h3>
+          <p>El repuesto que compras a partir del segundo año: 4 pares de electrodos originales Flora, uno para cada trimestre de uso regular.</p>
+          <div class="price-row">
+            <span class="price">$80.000 <small>COP</small></span>
+            <button class="add-btn" onclick="goToPreventa()">Agregar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2-col" style="gap:26px; margin-top:26px;">
+      <div class="reveal" style="background:var(--paper); border:1px solid var(--mauve-light); border-radius:22px; padding:32px;">
+        <h3 style="font-size:18px; color:var(--indigo-dark); margin-bottom:20px;">Especificaciones técnicas</h3>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px 20px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B98FB0" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
+            <span style="font-size:13.5px; color:var(--text-muted);">Calor hasta 43°C</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B98FB0" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+            <span style="font-size:13.5px; color:var(--text-muted);">3 modos de uso</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B98FB0" stroke-width="2"><path d="M3 18v-2M8 18v-6M13 18v-4M18 18V8M21 18H3"/></svg>
+            <span style="font-size:13.5px; color:var(--text-muted);">30 niveles de intensidad</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B98FB0" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            <span style="font-size:13.5px; color:var(--text-muted);">Sesiones de 30 o 60 min</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B98FB0" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"/><path d="M22 10v4"/></svg>
+            <span style="font-size:13.5px; color:var(--text-muted);">Batería de litio recargable</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B98FB0" stroke-width="2"><path d="M20 12a8 8 0 10-8 8"/><path d="M12 4v0"/></svg>
+            <span style="font-size:13.5px; color:var(--text-muted);">Diseño portátil</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal" style="background:linear-gradient(160deg, var(--indigo), #4a4290); border-radius:22px; padding:32px; display:flex; align-items:center; gap:22px;">
+        <img src="assets/app-icon.png" alt="App Flora" style="width:76px; height:76px; border-radius:20px; object-fit:cover; box-shadow:0 10px 24px rgba(0,0,0,0.25); flex-shrink:0; display:block;">
+        <div>
+          <h3 style="font-size:17px; color:#fff; margin-bottom:8px;">Acompañada por la app Flora</h3>
+          <p style="font-size:13.5px; color:var(--mauve-light); line-height:1.6; margin:0;">Flora viene con una app aparte que te acompaña paso a paso: te explica cómo usar tu dispositivo, aprende contigo y te ayuda a entender y tener más empatía con tu propio cuerpo, para que tengas un ritual de bienestar realmente efectivo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMUNIDAD -->
+<section id="testimonios" style="background:var(--blush);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Voces que confían en Flora</span>
+      <h2>Contado por quien ya la usa</h2>
+    </div>
+    <div class="reveal" style="max-width:340px; margin:0 auto;">
+      <video controls playsinline preload="metadata" poster="assets/testimonial-poster.jpg" style="width:100%; border-radius:22px; box-shadow:var(--shadow); display:block;">
+        <source src="assets/testimonial-video.mp4" type="video/mp4">
+      </video>
+      <div style="text-align:center; margin-top:18px;">
+        <p style="font-size:14px; color:var(--indigo-dark); font-weight:600; margin:0;">Christel Chadid</p>
+        <p style="font-size:12.5px; color:var(--text-muted); margin-top:2px;">Médica</p>
+        <p style="font-size:13px; color:var(--text-muted); line-height:1.6; margin-top:14px; max-width:300px; margin-left:auto; margin-right:auto;">Chris usa Flora para cuidar su bienestar y seguir su día sin limitarse.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sobre-nosotras">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Sobre nosotras</span>
+      <h2>Quiénes somos</h2>
+    </div>
+
+    <div class="reveal" style="background:var(--blush); border-radius:22px; padding:44px; margin-bottom:32px; max-width:800px; margin-left:auto; margin-right:auto;">
+      <p style="font-family:'Fraunces',serif; font-style:italic; font-size:19px; line-height:1.75; color:var(--indigo-dark); margin:0;">"Durante 17 años sentí que mi cuerpo me pedía pausar la vida, una y otra vez cada mes. Cancelé planes, dejé de disfrutar momentos con mi familia y amigas, y aprendí a creer que eso era simplemente 'normal'. Todo cambió cuando encontré un dispositivo de bienestar en una feria internacional: por primera vez en casi dos décadas pude vivir un día completamente distinto. Ese momento me hizo entender que muchas mujeres podrían sentir esa misma libertad. Así nació Flora."</p>
+      <p style="font-size:13px; color:var(--text-muted); margin-top:18px; margin-bottom:0; font-weight:600;">— Fundadora de Flora</p>
+    </div>
+
+    <div class="grid-2-col" style="gap:26px;">
+      <div class="reveal" style="background:var(--indigo); border-radius:22px; padding:38px;">
+        <h3 style="font-size:19px; color:#fff; margin-bottom:14px;">Visión</h3>
+        <p style="font-size:14.5px; color:var(--mauve-light); line-height:1.7; margin:0;">Ser el sistema de bienestar femenino de referencia, que acompaña y personaliza la salud de cada mujer, ayudándola a comprender su cuerpo para anticiparse al dolor en lugar de solo tratarlo.</p>
+      </div>
+      <div class="reveal" style="background:var(--blush); border:1px solid var(--mauve-light); border-radius:22px; padding:38px;">
+        <h3 style="font-size:19px; color:var(--indigo-dark); margin-bottom:14px;">Misión</h3>
+        <p style="font-size:14.5px; color:var(--text-muted); line-height:1.7; margin:0;">En Flora combinamos tecnología, ciencia y personalización para acompañar el bienestar de la mujer sin medicamentos, devolviéndole la libertad de vivir cada etapa sin límites.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background:var(--indigo); position:relative; overflow:hidden;">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow" style="color:var(--mauve);">Respaldado por la ciencia</span>
+      <h2 style="color:#fff;">No es magia, es tecnología con base científica</h2>
+      <p style="color:var(--mauve-light);">Los mecanismos detrás de Flora llevan décadas siendo estudiados por la ciencia.</p>
+    </div>
+
+    <div class="reveal grid-3-col" style="gap:24px;">
+      <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:32px 28px;">
+        <div style="width:44px; height:44px; border-radius:12px; background:var(--mauve); display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+        </div>
+        <h3 style="font-size:16px; color:#fff; margin-bottom:10px;">Electroestimulación (TENS)</h3>
+        <p style="font-size:13.5px; color:var(--mauve-light); line-height:1.65; margin:0 0 14px;">Activa las fibras nerviosas grandes de la piel, ayudando a modular las señales que percibe tu cuerpo — un mecanismo descrito por la Teoría de la Compuerta del Dolor.</p>
+        <p style="font-size:11px; color:rgba(232,214,226,0.6); font-style:italic; margin:0;">Melzack & Wall, "Pain Mechanisms: A New Theory", Science (1965)</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:32px 28px;">
+        <div style="width:44px; height:44px; border-radius:12px; background:var(--mauve); display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>
+        </div>
+        <h3 style="font-size:16px; color:#fff; margin-bottom:10px;">Liberación de endorfinas</h3>
+        <p style="font-size:13.5px; color:var(--mauve-light); line-height:1.65; margin:0 0 14px;">La estimulación eléctrica de baja frecuencia se asocia con la liberación de endorfinas, las sustancias naturales del cuerpo ligadas a la sensación de bienestar.</p>
+        <p style="font-size:11px; color:rgba(232,214,226,0.6); font-style:italic; margin:0;">DeSantana et al., Curr Pain Headache Rep (2008)</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:32px 28px;">
+        <div style="width:44px; height:44px; border-radius:12px; background:var(--mauve); display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
+        </div>
+        <h3 style="font-size:16px; color:#fff; margin-bottom:10px;">Calor terapéutico</h3>
+        <p style="font-size:13.5px; color:var(--mauve-light); line-height:1.65; margin:0 0 14px;">El calor superficial mejora la circulación sanguínea y favorece la relajación muscular — efectos documentados en múltiples estudios de fisiología.</p>
+        <p style="font-size:11px; color:rgba(232,214,226,0.6); font-style:italic; margin:0;">Journal of Applied Physiology; ScienceDirect, Heat Therapy Overview</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Preguntas frecuentes</span>
+      <h2>Todo lo que quieres saber</h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-q">¿Qué es Flora? <span class="plus">+</span></button>
+        <div class="faq-a"><p>Flora es un masajeador de bienestar con tecnología de estimulación tipo TENS, integrado con una aplicación inteligente que te guía cómo usar el masajeador. Juntos son Flora: una plataforma de acompañamiento integral que le da a cada mujer lo que yo no tuve — un agente conversacional que te guía paso a paso para usar tu dispositivo correctamente, y te acompaña en esos días del mes en que tu cuerpo solo pide una pausa. Sin pastillas, sin pausar tu vida.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">¿Cómo lo uso? <span class="plus">+</span></button>
+        <div class="faq-a"><p>Enciende el dispositivo, elige entre el modo de 30 o 60 minutos, y colócalo donde tu cuerpo lo pida. Es así de simple.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">¿Cada cuánto debo cambiar los electrodos? <span class="plus">+</span></button>
+        <div class="faq-a"><p>Recomendamos renovarlos cada 3 meses de uso regular para mantener el mejor desempeño del dispositivo.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">¿Hacen envíos a todo el país? <span class="plus">+</span></button>
+        <div class="faq-a"><p>Sí, hacemos envíos a toda Colombia. Los tiempos y costos de envío se confirman al finalizar tu compra.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">¿Cuál es la garantía? <span class="plus">+</span></button>
+        <div class="faq-a"><p>Si dentro de los primeros 60 días no estás conforme con tu experiencia, puedes devolver el dispositivo en buen estado, con sus electrodos originales, y te reembolsamos el valor pagado. <a href="#" onclick="openModal('modal-garantia', event)" style="color:var(--mauve); font-weight:600;">Ver todos los detalles →</a></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREVENTA -->
+<section id="preventa" class="preventa">
+  <div class="wrap">
+    <div class="preventa-icon" role="img" aria-label="Flora"></div>
+    <h2>Sé de las primeras en tenerlo</h2>
+    <p>Reserva tu cupo en la preventa fundadora. Cupos limitados, con un regalo especial para quienes reserven primero.</p>
+    <a href="https://wa.me/573103255823?text=Hola%2C%20quiero%20reservar%20mi%20cupo%20de%20preventa%20de%20Flora%20%F0%9F%8C%B8" target="_blank" rel="noopener" class="btn" style="background:var(--mauve); color:var(--indigo-dark); display:inline-flex; align-items:center; gap:10px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.2 16.8L2 22l5.3-1.4A8.9 8.9 0 0 0 12 21.9a8.9 8.9 0 0 0 5.6-15.6ZM12 20a7.1 7.1 0 0 1-3.6-1l-.3-.2-3.1.8.8-3-.2-.3A7.1 7.1 0 1 1 12 20Zm3.9-5.3c-.2-.1-1.3-.6-1.5-.7s-.3-.1-.5.1-.6.7-.8.9-.3.2-.5.1a5.8 5.8 0 0 1-1.7-1.1 6.4 6.4 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.4l.4-.4.2-.4a.5.5 0 0 0 0-.4c-.1-.1-.5-1.2-.7-1.6s-.4-.4-.5-.4h-.5a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.9 2 4.7 4.7 0 0 0 1 2.5 10.8 10.8 0 0 0 4.1 3.6c.6.2 1 .4 1.4.5a3.3 3.3 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c-.1-.1-.2-.2-.4-.3Z"/></svg>
+      Reservar por WhatsApp
+    </a>
+    <p class="preventa-count">Cupo fundadora: 30 unidades — sin compromiso de pago hasta confirmar</p>
+    <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:18px;">
+      <span style="font-size:11.5px; font-weight:600; color:var(--mauve-light); border:1px solid rgba(232,214,226,0.35); padding:5px 14px; border-radius:100px;">PSE</span>
+      <span style="font-size:11.5px; font-weight:600; color:var(--mauve-light); border:1px solid rgba(232,214,226,0.35); padding:5px 14px; border-radius:100px;">Tarjetas de crédito/débito</span>
+      <span style="font-size:11.5px; font-weight:600; color:var(--mauve-light); border:1px solid rgba(232,214,226,0.35); padding:5px 14px; border-radius:100px;">Cuotas sin interés</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">flõra<span class="tens">tens</span></div>
+        <p class="tag">Tu masajeador de bienestar, para esos días del mes en que tu cuerpo pide ir más despacio.</p>
+        <div class="social-row" style="margin-top:20px;">
+          <a href="https://www.instagram.com/flora_tens/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8D6E2" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8D6E2" stroke-width="1.8"><path d="M9 12a4 4 0 104 4V4a5 5 0 005 5"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Tienda</h4>
+        <a href="#producto">Flora</a>
+        <a href="#kit-electrodos-anual">Kit de electrodos (anual)</a>
+        <a href="#kit-flora-anual">Kit Flora anual</a>
+      </div>
+      <div class="footer-col">
+        <h4>Sobre nosotras</h4>
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#sobre-nosotras">Quiénes somos</a>
+        <a href="#faq">Preguntas frecuentes</a>
+      </div>
+      <div class="footer-col">
+        <h4>Políticas</h4>
+        <a href="#" onclick="openModal('modal-garantia', event)">Garantía y devoluciones</a>
+        <a href="#" onclick="openModal('modal-privacidad', event)">Privacidad de datos</a>
+        <a href="#" onclick="openModal('modal-terminos', event)">Términos y condiciones</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 FloraTens. Todos los derechos reservados.</span>
+      <span>Hecho con 🌸 en Colombia</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // logotipo completo real (nav)
+  const WORDMARK_FULL = "assets/wordmark-full.png";
+  document.querySelectorAll('.js-wordmark').forEach(img => img.src = WORDMARK_FULL);
+
+  // producto real (inyectado una sola vez, reutilizado en varias tarjetas)
+  const PRODUCT_PHOTO = "assets/device-photo.png";
+  document.querySelectorAll('.js-product-photo').forEach(img => img.src = PRODUCT_PHOTO);
+  const ELECTRODE_PHOTO = "assets/electrode-photo.png";
+  document.querySelectorAll('.js-electrode-photo').forEach(img => img.src = ELECTRODE_PHOTO);
+
+  // sticky header shadow
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // faq accordion
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const q = item.querySelector('.faq-q');
+    const a = item.querySelector('.faq-a');
+    q.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(o => { o.classList.remove('open'); o.querySelector('.faq-a').style.maxHeight = null; });
+      if(!isOpen){
+        item.classList.add('open');
+        a.style.maxHeight = a.scrollHeight + 'px';
+      }
+    });
+  });
+
+  // preventa -> WhatsApp
+  function goToPreventa(){
+    window.open('https://wa.me/573103255823?text=Hola%2C%20quiero%20reservar%20mi%20cupo%20de%20preventa%20de%20Flora%20%F0%9F%8C%B8', '_blank');
+  }
+
+  // mobile nav toggle style injection
+  const style = document.createElement('style');
+  style.textContent = `
+    @media (max-width:880px){
+      #navlinks{
+        position:fixed; top:64px; left:0; right:0; background:#FFFDFB;
+        flex-direction:column; padding:20px 28px; gap:18px;
+        transform:translateY(-120%); transition:transform .3s ease; box-shadow:0 10px 30px rgba(59,53,116,0.1);
+      }
+      #navlinks.mobile-open{transform:translateY(0); display:flex;}
+    }
+  `;
+  document.head.appendChild(style);
+
+  // cerrar el menú móvil al hacer clic en un enlace
+  document.querySelectorAll('#navlinks a').forEach(link => {
+    link.addEventListener('click', () => document.getElementById('navlinks').classList.remove('mobile-open'));
+  });
+</script>
+
+<!-- MODAL: Garantía y devoluciones -->
+<div class="modal-overlay" id="modal-garantia" onclick="if(event.target===this) closeModal('modal-garantia')">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal('modal-garantia')" aria-label="Cerrar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <span class="modal-icon" role="img" aria-label="Flora"></span><span class="eyebrow">Compra con confianza</span>
+    <h2 style="font-size:28px; margin-top:12px;">Garantía y devoluciones</h2>
+    <p style="color:var(--text-muted); font-size:14.5px; margin-top:10px; line-height:1.6;">Tres protecciones distintas, para que sepas exactamente qué cubre cada una.</p>
+
+    <div style="overflow-x:auto; margin:28px 0;">
+      <table style="width:100%; border-collapse:collapse; background:var(--blush); border-radius:16px; overflow:hidden; font-size:13.5px;">
+        <thead>
+          <tr style="background:var(--indigo); color:#fff; text-align:left;">
+            <th style="padding:14px 18px; font-weight:600; font-size:11.5px; text-transform:uppercase; letter-spacing:.04em;">Concepto</th>
+            <th style="padding:14px 18px; font-weight:600; font-size:11.5px; text-transform:uppercase; letter-spacing:.04em;">Qué es</th>
+            <th style="padding:14px 18px; font-weight:600; font-size:11.5px; text-transform:uppercase; letter-spacing:.04em;">Plazo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--mauve-light);">
+            <td style="padding:14px 18px; font-weight:600; color:var(--indigo-dark);">Derecho de retracto</td>
+            <td style="padding:14px 18px; color:var(--text-muted);">Arrepentimiento de compra a distancia (online), sin dar explicación</td>
+            <td style="padding:14px 18px; color:var(--text-muted);">5 días hábiles desde la entrega — mínimo legal</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--mauve-light); background:var(--mauve-light);">
+            <td style="padding:14px 18px; font-weight:600; color:var(--indigo-dark);">Garantía legal</td>
+            <td style="padding:14px 18px; color:var(--indigo-dark);">Cubre defectos de fabricación, no "resultados"</td>
+            <td style="padding:14px 18px; color:var(--indigo-dark);">1 año mínimo, para productos nuevos</td>
+          </tr>
+          <tr>
+            <td style="padding:14px 18px; font-weight:600; color:var(--indigo-dark);">Garantía de satisfacción FloraTens</td>
+            <td style="padding:14px 18px; color:var(--text-muted);">Compromiso voluntario de la marca, adicional a la ley</td>
+            <td style="padding:14px 18px; color:var(--text-muted);">60 días</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="background:var(--blush); border-radius:18px; padding:26px 28px;">
+      <p style="font-family:'Fraunces',serif; font-style:italic; font-size:16.5px; line-height:1.6; color:var(--indigo-dark); margin:0;">
+        "Garantía de satisfacción FloraTens: si dentro de los primeros 60 días no estás conforme con tu experiencia, puedes devolver el dispositivo (en buen estado, con electrodos originales) y te reembolsamos el valor pagado."
+      </p>
+      <div style="margin-top:18px; padding-top:18px; border-top:1px solid var(--mauve-light); font-size:12.5px; color:var(--text-muted); line-height:1.65;">
+        El costo de envío de la devolución corre por cuenta de la clienta. El dispositivo debe llegar en buen estado, con sus electrodos originales incluidos. El reembolso se realiza al mismo medio de pago utilizado en la compra.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Privacidad de datos -->
+<div class="modal-overlay" id="modal-privacidad" onclick="if(event.target===this) closeModal('modal-privacidad')">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal('modal-privacidad')" aria-label="Cerrar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <span class="modal-icon" role="img" aria-label="Flora"></span><span class="eyebrow">Tus datos, protegidos</span>
+    <h2 style="font-size:28px; margin-top:12px;">Política de tratamiento de datos personales</h2>
+    <p style="color:var(--text-muted); font-size:14.5px; margin-top:10px; line-height:1.6;">FloraTens S.A.S. es responsable del tratamiento de tus datos personales, conforme a la Ley 1581 de 2012 (Habeas Data) y su decreto reglamentario.</p>
+
+    <div style="display:flex; flex-direction:column; gap:20px; margin-top:26px;">
+      <div style="background:var(--blush); border-radius:16px; padding:20px 24px;">
+        <h3 style="font-size:15.5px; color:var(--indigo-dark);">¿Qué datos recolectamos?</h3>
+        <p style="font-size:13.5px; color:var(--text-muted); line-height:1.65; margin-top:8px;">Nombre, dirección de envío, teléfono y correo electrónico. Los datos de pago son procesados directamente por nuestra pasarela de pagos — FloraTens no almacena números de tarjeta.</p>
+      </div>
+      <div style="background:var(--blush); border-radius:16px; padding:20px 24px;">
+        <h3 style="font-size:15.5px; color:var(--indigo-dark);">¿Para qué los usamos?</h3>
+        <p style="font-size:13.5px; color:var(--text-muted); line-height:1.65; margin-top:8px;">Para procesar y enviar tu pedido, comunicarnos contigo sobre tu compra, y — solo si lo autorizas expresamente — enviarte contenido y novedades de la marca.</p>
+      </div>
+      <div style="background:var(--blush); border-radius:16px; padding:20px 24px;">
+        <h3 style="font-size:15.5px; color:var(--indigo-dark);">¿Con quién se comparten?</h3>
+        <p style="font-size:13.5px; color:var(--text-muted); line-height:1.65; margin-top:8px;">Únicamente con la transportadora (para tu envío) y la pasarela de pagos (para procesar tu compra). FloraTens no vende ni cede tus datos a terceros con fines comerciales.</p>
+      </div>
+      <div style="background:var(--blush); border-radius:16px; padding:20px 24px;">
+        <h3 style="font-size:15.5px; color:var(--indigo-dark);">Tus derechos</h3>
+        <p style="font-size:13.5px; color:var(--text-muted); line-height:1.65; margin-top:8px;">Puedes conocer, actualizar, rectificar y solicitar la eliminación de tus datos, así como revocar tu autorización en cualquier momento, escribiéndonos por WhatsApp al +57 310 325 5823.</p>
+      </div>
+    </div>
+
+    <p style="font-size:12px; color:var(--text-muted); margin-top:22px; line-height:1.6; font-style:italic;">
+      Nota: si en el futuro nuestra app o comunidad solicita datos relacionados con tu salud (por ejemplo, síntomas o ciclo), se te pedirá una autorización previa, expresa e informada adicional, específica para ese tipo de dato sensible.
+    </p>
+  </div>
+</div>
+
+<!-- MODAL: Términos y condiciones -->
+<div class="modal-overlay" id="modal-terminos" onclick="if(event.target===this) closeModal('modal-terminos')">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal('modal-terminos')" aria-label="Cerrar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <span class="modal-icon" role="img" aria-label="Flora"></span><span class="eyebrow">Antes de comprar</span>
+    <h2 style="font-size:28px; margin-top:12px;">Términos y condiciones</h2>
+    <p style="color:var(--text-muted); font-size:14.5px; margin-top:10px; line-height:1.6;">Al comprar en floratens.co, aceptas las siguientes condiciones.</p>
+
+    <div style="display:flex; flex-direction:column; gap:18px; margin-top:26px; font-size:13.5px; color:var(--text-muted); line-height:1.7;">
+      <div>
+        <h3 style="font-size:15px; color:var(--indigo-dark); margin-bottom:6px;">Precios y pagos</h3>
+        Todos los precios están expresados en pesos colombianos (COP) e incluyen los impuestos aplicables. Los precios pueden cambiar sin previo aviso, pero nunca después de haber confirmado tu compra.
+      </div>
+      <div>
+        <h3 style="font-size:15px; color:var(--indigo-dark); margin-bottom:6px;">Envíos</h3>
+        Realizamos envíos a toda Colombia a través de transportadoras aliadas. Los tiempos estimados de entrega se confirman al finalizar tu compra.
+      </div>
+      <div>
+        <h3 style="font-size:15px; color:var(--indigo-dark); margin-bottom:6px;">Derecho de retracto</h3>
+        Tienes 5 días hábiles desde la entrega para desistir de tu compra sin necesidad de justificación, conforme a la ley colombiana.
+      </div>
+      <div>
+        <h3 style="font-size:15px; color:var(--indigo-dark); margin-bottom:6px;">Garantías</h3>
+        Consulta el detalle completo en nuestra sección de <a href="#" onclick="closeModal('modal-terminos'); openModal('modal-garantia', event)" style="color:var(--mauve); font-weight:600;">Garantía y devoluciones</a>.
+      </div>
+      <div>
+        <h3 style="font-size:15px; color:var(--indigo-dark); margin-bottom:6px;">Propiedad intelectual</h3>
+        La marca FloraTens, su logotipo y todos los contenidos de este sitio son propiedad de FloraTens S.A.S. y no pueden reproducirse sin autorización.
+      </div>
+      <div>
+        <h3 style="font-size:15px; color:var(--indigo-dark); margin-bottom:6px;">Ley aplicable</h3>
+        Estos términos se rigen por las leyes de la República de Colombia, incluyendo la Ley 1480 de 2011 (Estatuto del Consumidor).
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function openModal(id, e){
+    if(e) e.preventDefault();
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id){
+    document.getElementById(id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
+  });
+</script>
+
+</body>
+</html>
