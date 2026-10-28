@@ -242,6 +242,12 @@ html{-webkit-text-size-adjust:100%}body{margin:0}[hidden]{display:none!important
     <input type="text" id="pSign" class="sel" maxlength="100" placeholder="Nombre y apellido" autocomplete="name">
     <p class="small" id="pMsg" role="status"></p>
     <button class="btn block" id="pGo">Aceptar y continuar</button>
+    <details id="pHave"><summary>Ya tengo cuenta, quiero entrar con mi código</summary>
+      <p class="small muted">Úsalo si ya te registraste en otro celular. Solo puede haber una sesión abierta: al entrar aquí, se cierra la otra.</p>
+      <input type="text" id="pCode" class="sel" placeholder="FLORA-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false">
+      <button class="btn block ghost" id="pLogin" style="margin-top:10px">Entrar</button>
+      <p class="small" id="pLMsg" role="status"></p>
+    </details>
   </div>
 </section>
 
@@ -539,6 +545,7 @@ function show(t){
   document.querySelectorAll('section').forEach(s=>s.hidden=s.id!=='s-'+t);
   document.querySelectorAll('nav button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===t));
   $('nav').hidden=(t==='bienvenida'||t==='politica');
+  if(t==='bienvenida'&&store.get('kicked')){const m=$('#oMsg');if(m&&!m.textContent)m.textContent='Tu sesión se abrió en otro celular, así que aquí la cerré. Para volver a entrar escribe tu código otra vez.'}
   if(t==='inicio')renderHome();
   window.scrollTo(0,0);if(TABS.includes(t))store.set('tab',t);
 }
@@ -615,6 +622,15 @@ $('#pGo').onclick=()=>{
   const p=prof();if(!p.name){p.name=$('#oName').value;store.set('prof',p)}
   show('bienvenida');
 };
+$('#pCode').oninput=()=>{$('#pCode').value=$('#pCode').value.toUpperCase()};
+$('#pLogin').onclick=async()=>{
+  const c=$('#pCode').value.trim(),m=$('#pLMsg');
+  if(!c){m.textContent='Escribe tu código de acceso.';return}
+  $('#pLogin').disabled=true;m.textContent='Un momento...';
+  const r=await doLogin(c);$('#pLogin').disabled=false;
+  if(!r.ok){m.textContent=r.msg;return}
+  m.textContent='';greet();show('inicio');
+};
 $('#oName').oninput=()=>{const p=prof();p.name=$('#oName').value;store.set('prof',p)};
 $('#oReg').onchange=()=>{$('#oRegBox').style.display=$('#oReg').checked?'flex':'none'};
 $('#oRegBox').style.display='none';
@@ -633,6 +649,7 @@ $('#oGo').onclick=async()=>{
   $('#oGo').disabled=riskState.size>0;
   if(!r.ok){msg.textContent=r.msg;return}
   msg.textContent='';store.set('onb',1);greet();show('inicio');
+  if(r.returning){setTimeout(()=>{const hs=$('#homeSay');if(hs)hs.insertAdjacentHTML('beforeend','<br><br>¡Qué bueno verte de nuevo! Cerré la sesión en tu otro celular.'+(r.consent?'':' Tus registros viven en el celular donde los guardaste.'))},50)}
 };
 
 /* ===== acceso con código y cuenta (Worker flora-guia) ===== */
@@ -647,12 +664,34 @@ async function register(o){
     const j=await r.json().catch(()=>({}));
     if(j.error==='policy_required')return{ok:false,msg:'Falta aceptar la política de datos y escribir tu nombre como firma.'};
     if(j.error==='code_invalid')return{ok:false,msg:'Ese código no es válido. Revísalo o escríbenos por WhatsApp.'};
-    if(j.error==='code_used')return{ok:false,msg:'Ese código ya fue usado. Escríbenos por WhatsApp y te ayudamos.'};
+    if(j.error==='code_used')return await doLogin(o.code);
     if(j.error==='exists')return{ok:false,msg:'Ese correo ya tiene una cuenta. Escríbenos por WhatsApp y te ayudamos.'};
     if(!r.ok||!j.id)return{ok:false,msg:'No pude entrar ahora. Intenta de nuevo en un rato.'};
     store.set('acct',{id:j.id,token:j.token,consent:!!j.consent,email:o.consent?(o.email||'').trim():''});schedSync(300);return{ok:true};
   }catch(e){return{ok:false,msg:'No tengo conexión. Intenta de nuevo cuando tengas internet.'}}
 }
+async function doLogin(code){
+  try{
+    const r=await post('/login',{code});const j=await r.json().catch(()=>({}));
+    if(j.error==='too_many')return{ok:false,msg:'Demasiados intentos. Espera un rato y vuelve a probar.'};
+    if(j.error==='code_invalid'||j.error==='code_unused')return{ok:false,msg:'Ese código no es válido. Revísalo o escríbenos por WhatsApp.'};
+    if(!r.ok||!j.id)return{ok:false,msg:'No pude entrar ahora. Intenta de nuevo en un rato.'};
+    store.set('acct',{id:j.id,token:j.token,consent:!!j.consent,email:j.email||''});
+    store.set('pol',{signature:j.signature||'',at:j.policyAt||new Date().toISOString()});
+    const d=j.data||{};
+    store.set('prof',Object.assign({},prof(),{name:j.name||prof().name,use:j.use||prof().use},d.prof||{}));
+    if(d.starts)store.set('starts',d.starts);if(d.logs)store.set('logs',d.logs);if(d.cfg)store.set('cfg',d.cfg);
+    store.set('kicked',null);store.set('onb',1);
+    return{ok:true,returning:true,consent:!!j.consent};
+  }catch(e){return{ok:false,msg:'No tengo conexión. Intenta de nuevo cuando tengas internet.'}}
+}
+function kick(){['acct','onb'].forEach(k=>store.set(k,null));store.set('kicked',1);location.reload()}
+async function checkSession(){
+  const a=acct();if(!a)return;
+  try{const r=await post('/session',{id:a.id,token:a.token});if(r.status===401)kick()}catch(e){}
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkSession()});
+setTimeout(checkSession,800);
 let syncT=null;
 function schedSync(ms){
   const a=acct();if(!a||!a.consent)return;clearTimeout(syncT);
@@ -660,7 +699,7 @@ function schedSync(ms){
     const a=acct();if(!a||!a.consent)return;
     try{
       const r=await post('/sync',{id:a.id,token:a.token,data:{prof:prof(),starts:starts(),logs:logs(),cfg:store.get('cfg')}});
-      if(r.status===401){store.set('acct',null);store.set('onb',null);location.reload()}
+      if(r.status===401)kick()
     }catch(e){}
   },ms||1500);
 }
@@ -994,7 +1033,7 @@ function saveCfg(n,p,lvl){store.set('cfg',{pain:n,mode:p.mode,presses:p.presses,
 /* ===== aprender: pasos ===== */
 const steps=[
  ['Carga el dispositivo','Conéctalo por USB. La luz verde parpadea mientras carga. Tarda unas 2 horas.'],
- ['Encaja el pad en el controlador','El pad no tiene cables. Alinea los 4 pines del controlador con los 4 pines del pad y presiona hasta que encajen. Luego abre el parche de gel y pégalo sobre el pad.'],
+ ['Encaja el pad en el controlador','El pad no tiene cables. Alinea los 4 pines del controlador con los 4 pines del pad y presiona hasta que encajen. Luego abre el parche de gel, remueve el protector del pad y colócalo en la zona donde te duela.'],
  ['Ubícalo en la zona del dolor','Pega el pad sobre el abdomen bajo o la zona que te duele, sobre piel limpia y seca.'],
  ['Enciende','Toque corto en el botón de encendido. Empieza en el modo 1 con intensidad 0.'],
  ['Elige el modo según tu dolor','Dolor de 5 o menos: modo 1. Mayor a 5: un toque más en encendido (modo 2, el LED titila 2 veces). Mayor a 7: dos toques más (modo 3, titila 3 veces). Al cambiar, la intensidad vuelve a 0. Míralo en Mi sesión.'],
